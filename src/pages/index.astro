@@ -1,11 +1,410 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
+const mockTents: Tent[] = [
+    {
+        id: "1",
+        name: "QuickPitch Pro",
+        brand: "Coleman",
+        price: 199.99,
+        rating: 4.5,
+        capacity: 4,
+        weight: 4.5,
+        setupTime: 30,
+        dimensions: {
+            length: 240,
+            width: 220,
+            height: 190,
+        },
+        waterproof: true,
+        season: 3,
+        features: ["UV Protection", "Double-layer", "Ventilation windows"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
+    },
+    {
+        id: "2",
+        name: "Instant Dome",
+        brand: "Quechua",
+        price: 149.99,
+        rating: 4.2,
+        capacity: 2,
+        weight: 3.2,
+        setupTime: 20,
+        dimensions: {
+            length: 210,
+            width: 180,
+            height: 170,
+        },
+        waterproof: true,
+        season: 2,
+        features: ["Water Resistant", "Easy Setup", "Compact"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=800&q=80",
+    },
+    {
+        id: "3",
+        name: "CloudRest XL",
+        brand: "NatureHike",
+        price: 299.99,
+        rating: 4.8,
+        capacity: 6,
+        weight: 6.5,
+        setupTime: 45,
+        dimensions: {
+            length: 300,
+            width: 280,
+            height: 200,
+        },
+        waterproof: true,
+        season: 4,
+        features: ["All-Season", "Large Vestibule", "Heavy Duty"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=800&q=80",
+    },
+    {
+        id: "4",
+        name: "LightSpeed 3P",
+        brand: "Ozark Trail",
+        price: 129.99,
+        rating: 4.0,
+        capacity: 3,
+        weight: 3.8,
+        setupTime: 25,
+        dimensions: {
+            length: 220,
+            width: 200,
+            height: 180,
+        },
+        waterproof: false,
+        season: 2,
+        features: ["Lightweight", "Mesh Roof", "Budget Friendly"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=800&q=80",
+    },
+    {
+        id: "5",
+        name: "Mountain Pro",
+        brand: "Coleman",
+        price: 249.99,
+        rating: 4.6,
+        capacity: 4,
+        weight: 5.2,
+        setupTime: 35,
+        dimensions: {
+            length: 260,
+            width: 240,
+            height: 195,
+        },
+        waterproof: true,
+        season: 3,
+        features: ["Storm Protection", "Large Windows", "Gear Loft"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1510312305653-8ed496efae75?w=800&q=80",
+    },
+    {
+        id: "6",
+        name: "UltraLight 2",
+        brand: "NatureHike",
+        price: 179.99,
+        rating: 4.3,
+        capacity: 2,
+        weight: 2.8,
+        setupTime: 15,
+        dimensions: {
+            length: 200,
+            width: 170,
+            height: 160,
+        },
+        waterproof: true,
+        season: 3,
+        features: ["Ultralight", "Backpacking", "Quick Dry"],
+        imageUrl:
+            "https://images.unsplash.com/photo-1517823382935-51bfcb0ec6bc?w=800&q=80",
+    },
+];
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const brands = ["Coleman", "Quechua", "NatureHike", "Ozark Trail"];
+const capacities = [2, 3, 4, 6, 8];
+const seasons = [1, 2, 3, 4];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Best Pop Up Tents - Compare & Find Your Perfect Tent</title>
+    </head>
+    <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+        <header
+            class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50"
+        >
+            <nav class="max-w-7xl mx-auto p-4">
+                <div class="flex justify-between items-center">
+                    <h1
+                        class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 text-transparent bg-clip-text"
+                    >
+                        BestPopUpTents.com
+                    </h1>
+                    <div class="space-x-6">
+                        <a
+                            href="/compare"
+                            class="text-gray-600 hover:text-emerald-600 transition"
+                            >Compare</a
+                        >
+                        <a
+                            href="/guide"
+                            class="text-gray-600 hover:text-emerald-600 transition"
+                            >Buying Guide</a
+                        >
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-8">
+            <div class="flex gap-8">
+                {/* Filters Sidebar */}
+                <div class="w-72 flex-shrink-0">
+                    <div
+                        class="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-gray-100"
+                    >
+                        <h2 class="font-semibold mb-6 text-gray-800">
+                            Filters
+                        </h2>
+
+                        {/* Price Range */}
+                        <div class="mb-8">
+                            <h3 class="text-sm font-medium mb-3 text-gray-700">
+                                Price Range
+                            </h3>
+                            <div class="space-y-2">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="500"
+                                    class="w-full accent-emerald-600"
+                                />
+                                <div
+                                    class="flex justify-between text-sm text-gray-500"
+                                >
+                                    <span>$0</span>
+                                    <span>$500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Brands */}
+                        <div class="mb-8">
+                            <h3 class="text-sm font-medium mb-3 text-gray-700">
+                                Brands
+                            </h3>
+                            <div class="space-y-2">
+                                {
+                                    brands.map((brand) => (
+                                        <label class="flex items-center group cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                            />
+                                            <span class="text-gray-600 group-hover:text-gray-800 transition">
+                                                {brand}
+                                            </span>
+                                        </label>
+                                    ))
+                                }
+                            </div>
+                        </div>
+
+                        {/* Capacity */}
+                        <div class="mb-8">
+                            <h3 class="text-sm font-medium mb-3 text-gray-700">
+                                Capacity
+                            </h3>
+                            <div class="space-y-2">
+                                {
+                                    capacities.map((cap) => (
+                                        <label class="flex items-center group cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                            />
+                                            <span class="text-gray-600 group-hover:text-gray-800 transition">
+                                                {cap} Person{cap > 1 ? "s" : ""}
+                                            </span>
+                                        </label>
+                                    ))
+                                }
+                            </div>
+                        </div>
+
+                        {/* Season Rating */}
+                        <div class="mb-8">
+                            <h3 class="text-sm font-medium mb-3 text-gray-700">
+                                Season Rating
+                            </h3>
+                            <div class="space-y-2">
+                                {
+                                    seasons.map((season) => (
+                                        <label class="flex items-center group cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                            />
+                                            <span class="text-gray-600 group-hover:text-gray-800 transition">
+                                                {season}-Season
+                                            </span>
+                                        </label>
+                                    ))
+                                }
+                            </div>
+                        </div>
+
+                        {/* Features */}
+                        <div class="mb-6">
+                            <h3 class="text-sm font-medium mb-3 text-gray-700">
+                                Features
+                            </h3>
+                            <div class="space-y-2">
+                                <label
+                                    class="flex items-center group cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                    />
+                                    <span
+                                        class="text-gray-600 group-hover:text-gray-800 transition"
+                                        >Waterproof</span
+                                    >
+                                </label>
+                                <label
+                                    class="flex items-center group cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                    />
+                                    <span
+                                        class="text-gray-600 group-hover:text-gray-800 transition"
+                                        >UV Protection</span
+                                    >
+                                </label>
+                                <label
+                                    class="flex items-center group cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="form-checkbox text-emerald-600 rounded border-gray-300 mr-3"
+                                    />
+                                    <span
+                                        class="text-gray-600 group-hover:text-gray-800 transition"
+                                        >Double-layer</span
+                                    >
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content */}
+                <div class="flex-1">
+                    {/* Sort Bar */}
+                    <div
+                        class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-gray-100 mb-8"
+                    >
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600"
+                                >{mockTents.length} tents found</span
+                            >
+                            <select
+                                class="border rounded-lg px-3 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            >
+                                <option>Sort by: Featured</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Rating</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Tents Grid */}
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {
+                            mockTents.map((tent) => (
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition group">
+                                    <div class="relative">
+                                        <img
+                                            src={tent.imageUrl}
+                                            alt={tent.name}
+                                            class="w-full h-48 object-cover group-hover:scale-105 transition duration-300"
+                                        />
+                                        <div class="absolute top-3 right-3">
+                                            <span class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-medium text-emerald-600">
+                                                ${tent.price}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="p-5">
+                                        <div class="mb-3">
+                                            <h3 class="font-semibold text-gray-800 group-hover:text-emerald-600 transition">
+                                                {tent.name}
+                                            </h3>
+                                            <p class="text-sm text-gray-500">
+                                                {tent.brand}
+                                            </p>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center text-sm">
+                                                <div class="flex text-yellow-400">
+                                                    {"★".repeat(
+                                                        Math.floor(tent.rating),
+                                                    )}
+                                                    {"☆".repeat(
+                                                        5 -
+                                                            Math.floor(
+                                                                tent.rating,
+                                                            ),
+                                                    )}
+                                                </div>
+                                                <span class="ml-2 text-gray-500">
+                                                    {tent.rating}/5
+                                                </span>
+                                            </div>
+                                            <div class="flex flex-wrap gap-2">
+                                                <span class="text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-lg font-medium">
+                                                    {tent.capacity} Person
+                                                </span>
+                                                <span class="text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-lg font-medium">
+                                                    {tent.season}-Season
+                                                </span>
+                                                <span class="text-xs bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-lg font-medium">
+                                                    {tent.weight}kg
+                                                </span>
+                                            </div>
+                                            <button class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-2 rounded-lg mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                View Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center">
+                    <p>
+                        &copy; 2024 BestPopUpTents.com - Your Guide to Pop-Up
+                        Tents
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
