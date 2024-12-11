@@ -3,13 +3,11 @@ import { defineMiddleware } from "astro:middleware";
 export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
 
-  // Normalizuj ścieżkę - usuń multiple slashes i trailing slash
-  const normalizedPath = url.pathname
-    .replace(/\/+/g, "/") // zamień multiple slashes na pojedynczy
-    .replace(/\/$/, ""); // usuń trailing slash (jeśli nie jest to root)
+  // Jeśli jest więcej niż jeden slash z rzędu
+  if (url.pathname.includes("//")) {
+    // Normalizuj ścieżkę - zamień wszystkie multiple slashes na pojedynczy
+    const normalizedPath = url.pathname.replace(/\/+/g, "/");
 
-  // Jeśli ścieżka została zmieniona, zrób redirect
-  if (url.pathname !== normalizedPath && url.pathname !== "/") {
     return new Response(null, {
       status: 301,
       headers: {
@@ -18,7 +16,16 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
   }
 
-  // Dodaj security headers
+  // Usuń trailing slash (ale nie dla root path)
+  if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+    return new Response(null, {
+      status: 301,
+      headers: {
+        Location: `${url.origin}${url.pathname.slice(0, -1)}${url.search}`,
+      },
+    });
+  }
+
   const response = await next();
   const newHeaders = new Headers(response.headers);
   newHeaders.set("X-Content-Type-Options", "nosniff");
