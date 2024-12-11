@@ -1,5 +1,8 @@
 ---
-// src/pages/index.astro
+if (Astro.url.pathname.includes("//")) {
+    return Astro.redirect(Astro.url.pathname.replace(/\/+/g, "/"), 301);
+}
+
 const mockTents: Tent[] = [
     {
         id: "1",

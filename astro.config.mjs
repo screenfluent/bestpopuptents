@@ -7,6 +7,9 @@ export default defineConfig({
   output: "server",
   adapter: cloudflare(),
   trailingSlash: "never",
+  redirects: {
+    "//*": "/",
+  },
   build: {
     format: "directory",
   },
