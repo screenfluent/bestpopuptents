@@ -1,6 +1,10 @@
 import { defineMiddleware } from "astro:middleware";
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  console.log("🔍 Middleware triggered");
+  console.log("URL:", context.request.url);
+  console.log("Path:", new URL(context.request.url).pathname);
+
   const url = new URL(context.request.url);
 
   // Jeśli jest więcej niż jeden slash z rzędu
@@ -28,6 +32,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const response = await next();
   const newHeaders = new Headers(response.headers);
+  newHeaders.set("X-Debug", "Middleware-Processed");
   newHeaders.set("X-Content-Type-Options", "nosniff");
   newHeaders.set("X-Frame-Options", "DENY");
   newHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
